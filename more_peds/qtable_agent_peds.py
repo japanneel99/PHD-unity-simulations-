@@ -39,7 +39,8 @@ class QtableAgent:
         self.actions_candidates = np.array(action_candidates)
         self.n_action = len(action_candidates)
         self.quantization = quantization
-        dimension = [quantization[i][2] for i in range(len(quantization))]
+        # dimension = [quantization[i][2] for i in range(len(quantization))] #which one is needed - ask Kuroda Kun
+        dimension = [(quantization[i][2]*2) for i in range(len(quantization))]
         self.q_table = np.zeros(dimension + [self.n_action])
 
     def act(self, states, custom_epsilon=None):
@@ -95,39 +96,27 @@ class QtableAgent:
             for i in range(len(self.quantization))]
         return self.q_table.__setitem__(tuple(index + [action_index]), val)
 
-    # def save(self, directory='saved_variables'):
-    #     # TODO: save n_action and other variables
-    #     np.save(directory+"/q_table.npy", self.q_table)
-    #     args = (self.actions_candidates, self.quantization, self.epsilon,
-    #             self.alpha, self.gamma,)
-    #     with open(directory+"/args.pickles", "wb") as f:
-    #         pickle.dump(args, f)
+    def save(self, directory='saved_variables'):
+        # TODO: save n_action and other variables
+        np.save(directory+"/q_table.npy", self.q_table)
+        args = (self.actions_candidates, self.quantization,
+                self.epsilon, self.alpha, self.gamma)
+        with open(directory+"/args.pickles", "wb") as f:
+            pickle.dump(args, f)
 
-    # @staticmethod
-    # def load(self, directory='saved_variables'):
-    #     with open(directory+"/args.pickles", "rb") as f:
-    #         args = pickle.load(f)
-    #     action_candidates, quantization, epsilon, alpha, gamma = args
-    #     agent = QtableAgent(action_candidates, quantization,
-    #                         epsilon, alpha, gamma)
-    #     agent.q_table = np.load(directory+"/q_table.npy")
-    #     return agent
-
-    # def save(self, directory='Tensorforce/Q_Learning/environments/more_peds/lots_of_peds_variables/q_tables'):
-    #     # TODO: save n_action and other variables
-    #     np.save(directory, 'q_table.npy', self.q_table)
+    # def save(self, directory='Desktop/Data'):
+    #     np.save(directory+"q_table.npy", self.q_table)
     #     args = (self.actions_candidates, self.quantization,
     #             self.epsilon, self.alpha, self.gamma)
     #     with open(directory+"/args.pickles", "wb") as f:
     #         pickle.dump(args, f)
 
-    # @staticmethod
-    # # def load(self, directory='saved_variables'):
-    # def load(self, directory='Tensorforce/Q_Learning/environments/more_peds/lots_of_peds_variables'):
-    #     with open(directory+"/args.pickles", "rb") as f:
-    #         args = pickle.load(f)
-    #     action_candidates, quantization, epsilon, alpha, gamma = args
-    #     agent = QtableAgent(action_candidates, quantization,
-    #                         epsilon, alpha, gamma)
-    #     agent.q_table = np.load(directory+"/q_table.npy")
-    #     return agent
+    @staticmethod
+    def load(self, directory='saved_variables'):
+        with open(directory+"/args.pickles", "rb") as f:
+            args = pickle.load(f)
+        action_candidates, quantization, epsilon, alpha, gamma = args
+        agent = QtableAgent(action_candidates, quantization,
+                            epsilon, alpha, gamma)
+        agent.q_table = np.load(directory+"/q_table.npy")
+        return agent

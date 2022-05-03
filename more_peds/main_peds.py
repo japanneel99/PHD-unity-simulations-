@@ -30,7 +30,7 @@ def visualize_q_table(agent, environment):
     dt = 0.01
 
     states_list, actions_list, terminal_list, reward_list, feeling_list = simulate(
-        environment, agent, True, custom_epsilon=0.0)
+        environment, agent, False, custom_epsilon=0.0)
 
     states_list = np.array(states_list)
     relative_distances_p1 = states_list[:, 0]
@@ -111,11 +111,11 @@ def learn(environment, agent, n_epoch, save_every_10, use_experience):
         rewards_learned.append(deepcopy(reward_list))
         feeling_learned.append(deepcopy(feeling_list))
 
-        if i % 100 == 0 and save_every_10:
+        if i % 10000 == 0 and save_every_10:
             directory = "%d_model" % i
             if not os.path.exists(directory):
                 os.mkdir(directory)
-                # agent.save(directory)
+                agent.save(directory)
 
         if use_experience:
             agent.experience(states=states_list, actions=actions_list,
@@ -166,7 +166,7 @@ def main():
                             alpha=0.1,
                             gamma=0.9)
     else:
-        n = int(input("which geenration do you want to load").strip())
+        n = int(input("which genration do you want to load?").strip())
         directory = "%d_model" % n
         agent = QtableAgent.load(directory)
 
@@ -175,9 +175,9 @@ def main():
         return
 
     states_learned, actions_learned, terminal_learned, rewards_learned, feeling_learned = learn(
-        environment, agent, n_epoch=101, save_every_10=True, use_experience=False)
+        environment, agent, n_epoch=20001, save_every_10=True, use_experience=False)
 
-    # agent.save("saved_variables")
+    agent.save("saved_variables")
 
     visualize_q_table(agent, environment)
 

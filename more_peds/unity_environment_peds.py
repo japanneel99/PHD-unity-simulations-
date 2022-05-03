@@ -26,6 +26,7 @@ class UnityEnvironment:
         self.a = a
 
     def states(self):
+        # return dict(type='float', shape=(6,))
         return dict(type='float', shape=(6,))
 
     def get_state_from_unity(self):
@@ -35,29 +36,29 @@ class UnityEnvironment:
         wheelchair_position = [wheelchair_position_dict['x'],
                                wheelchair_position_dict['y'], wheelchair_position_dict['z']]
 
-        self.sock.sendall("GET_PEDESTRIAN1_POSITION".encode("UTF-8"))
-        receivedData = self.sock.recv(1024).decode("UTF-8")
-        pedestrian1_pos_dict = json.loads(receivedData)
-        pedestrian1_position = [pedestrian1_pos_dict['x'],
-                                pedestrian1_pos_dict['y'], pedestrian1_pos_dict['z']]
-
-        self.sock.sendall("GET_PEDESTRIAN2_POSITION".encode("UTF-8"))
-        receivedData = self.sock.recv(1024).decode("UTF-8")
-        pedestrian2_pos_dict = json.loads(receivedData)
-        pedestrian2_position = [pedestrian2_pos_dict['x'],
-                                pedestrian2_pos_dict['y'], pedestrian2_pos_dict['z']]
-
         self.sock.sendall("GET_WHEELCHAIR_VELOCITY".encode("UTF-8"))
         receivedData = self.sock.recv(1024).decode("UTF-8")
         wheelchair_vel_dict = json.loads(receivedData)
         wheelchair_velocity = [wheelchair_vel_dict['x'],
                                wheelchair_vel_dict['y'], wheelchair_vel_dict['z']]
 
+        self.sock.sendall("GET_PEDESTRIAN1_POSITION".encode("UTF-8"))
+        receivedData = self.sock.recv(1024).decode("UTF-8")
+        pedestrian1_pos_dict = json.loads(receivedData)
+        pedestrian1_position = [pedestrian1_pos_dict['x'],
+                                pedestrian1_pos_dict['y'], pedestrian1_pos_dict['z']]
+
         self.sock.sendall("GET_PEDESTRIAN1_VELOCITY".encode("UTF-8"))
         receivedData = self.sock.recv(1024).decode("UTF-8")
         pedestrian1_vel_dict = json.loads(receivedData)
         pedestrian1_velocity = [pedestrian1_vel_dict['x'],
                                 pedestrian1_vel_dict['y'], pedestrian1_vel_dict['z']]
+
+        self.sock.sendall("GET_PEDESTRIAN2_POSITION".encode("UTF-8"))
+        receivedData = self.sock.recv(1024).decode("UTF-8")
+        pedestrian2_pos_dict = json.loads(receivedData)
+        pedestrian2_position = [pedestrian2_pos_dict['x'],
+                                pedestrian2_pos_dict['y'], pedestrian2_pos_dict['z']]
 
         self.sock.sendall("GET_PEDESTRIAN2_VELOCITY".encode("UTF-8"))
         receivedData = self.sock.recv(1024).decode("UTF-8")
